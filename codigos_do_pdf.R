@@ -1,3 +1,5 @@
+library (qcc)
+
 #item b)
 gera.grafico.R <- function (dados){
   library (qcc)
