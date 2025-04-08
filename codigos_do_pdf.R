@@ -157,3 +157,50 @@ for (j in 1:nrow(M)){
                       "e desvio ",
                       round(sigma.1[j],2)))
 }
+
+#Processo sendo interrompido
+set.seed (123)
+
+mu.1 <- M[,3]
+sigma.1 <- M[,4]
+
+for (j in 1:nrow(M)){
+  diametros.fase.2 <- diametros.fase.1[0,]
+  
+  for (i in 1:25){
+    diametros.amostra <- rnorm (5, mu.1[j], sigma.1[j])
+    diametros.fase.2 <- rbind (diametros.fase.2, diametros.amostra)
+    
+    grafico.R.fase.2 <- qcc(diametros.fase.1,
+                            type = "R",
+                            newdata = diametros.fase.2,
+                            std.dev = sigma.0,
+                            plot = FALSE)
+    
+    pontos.fora.R <- grafico.R.fase.2$violations$beyond.limits
+    
+    grafico.Xbar.fase.2 <- qcc(diametros.fase.1,
+                               type = "xbar",
+                               newdata = diametros.fase.2,
+                               std.dev = sigma.0,
+                               plot = FALSE)
+    
+    pontos.fora.Xbar <- grafico.Xbar.fase.2$violations$beyond.limits
+    
+    if (length(pontos.fora.R) != 0 | length(pontos.fora.Xbar) != 0) break
+  }
+  
+
+  
+  plot (grafico.R.fase.2,
+        title = paste("Gráfico R - mdia ",
+                      round(mu.1[j],2),
+                      "e desvio ",
+                      round(sigma.1[j],2)))
+  
+  plot (grafico.Xbar.fase.2,
+        title = paste("Gráfico Xbar - mdia ",
+                      round(mu.1[j],2),
+                      "e desvio ",
+                      round(sigma.1[j],2)))
+}
